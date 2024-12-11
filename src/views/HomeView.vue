@@ -136,6 +136,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useCookies } from '@vueuse/integrations/useCookies'
 
 import LanguageSelector from '@/components/LanguageSelector.vue'
 import type { Language } from '@/types'
@@ -174,7 +175,17 @@ const translations: Record<Language, Translations> = {
 }
 
 const email = ref<string>('')
-const currentLanguage = ref<Language>('en')
+
+const cookies = useCookies(['locale'])
+
+const currentLanguage = computed<Language>({
+  get() {
+    return cookies.get('locale') || 'en'
+  },
+  set(newValue) {
+    cookies.set('locale', newValue)
+  },
+})
 
 const currentTranslations = computed<Translations>(() => translations[currentLanguage.value])
 

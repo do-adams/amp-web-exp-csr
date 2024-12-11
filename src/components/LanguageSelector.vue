@@ -4,10 +4,7 @@
     <select
       id="language-select"
       :value="modelValue"
-      @change="
-        ($emit('update:modelValue', ($event.target as HTMLSelectElement).value),
-        cookies.set('locale', ($event.target as HTMLSelectElement).value))
-      "
+      @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
       class="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
     >
       <option v-for="option in options" :key="option.value" :value="option.value">
@@ -18,10 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { useCookies } from '@vueuse/integrations/useCookies'
-
 import type { Language } from '@/types'
-import { watch, type PropType } from 'vue'
+import { type PropType } from 'vue'
 
 defineProps({
   modelValue: {
@@ -31,15 +26,6 @@ defineProps({
 })
 
 defineEmits(['update:modelValue'])
-
-const cookies = useCookies(['locale'])
-
-watch(
-  () => cookies.get('locale'),
-  (locale) => {
-    console.log('cookie locale updated: ', locale)
-  },
-)
 
 const options = [
   { value: 'en', label: 'English' },
