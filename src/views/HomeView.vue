@@ -1,14 +1,20 @@
-// LandingPage.vue
 <template>
   <div class="landing-page">
+    <!-- Language Selector -->
+    <div class="bg-white py-4 px-4 border-b">
+      <div class="container mx-auto max-w-6xl flex justify-end">
+        <LanguageSelector v-model="currentLanguage" />
+      </div>
+    </div>
+
     <!-- Hero Section - Good for testing text, button and background changes -->
     <section class="hero bg-blue-100 py-20 px-4">
       <div class="container mx-auto max-w-6xl">
         <h1 id="main-headline" class="text-4xl font-bold mb-6 text-center">
-          Welcome to Our Product
+          {{ currentTranslations.mainHeadline }}
         </h1>
         <p id="hero-description" class="text-xl text-center mb-8">
-          Discover amazing features and boost your productivity
+          {{ currentTranslations.heroDescription }}
         </p>
         <div class="text-center">
           <button
@@ -129,9 +135,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-// Interfaces
+import LanguageSelector from '@/components/LanguageSelector.vue'
+import type { Language } from '@/types'
+
 interface Feature {
   title: string
   description: string
@@ -149,10 +157,27 @@ interface Testimonial {
   title: string
 }
 
-// Reactive state
-const email = ref<string>('')
+interface Translations {
+  mainHeadline: string
+  heroDescription: string
+}
 
-// Features data
+const translations: Record<Language, Translations> = {
+  en: {
+    mainHeadline: 'Welcome to Our Product',
+    heroDescription: 'Discover amazing features and boost your productivity',
+  },
+  es: {
+    mainHeadline: 'Bienvenido a Nuestro Producto',
+    heroDescription: 'Descubre increíbles características y aumenta tu productividad',
+  },
+}
+
+const email = ref<string>('')
+const currentLanguage = ref<Language>('en')
+
+const currentTranslations = computed<Translations>(() => translations[currentLanguage.value])
+
 const features: Feature[] = [
   {
     title: 'Easy Integration',
@@ -168,7 +193,6 @@ const features: Feature[] = [
   },
 ]
 
-// Pricing plans data
 const pricingPlans: PricingPlan[] = [
   {
     name: 'Basic',
@@ -187,7 +211,6 @@ const pricingPlans: PricingPlan[] = [
   },
 ]
 
-// Testimonials data
 const testimonials: Testimonial[] = [
   {
     quote: 'This product has transformed how we do business. Highly recommended!',
@@ -195,13 +218,12 @@ const testimonials: Testimonial[] = [
     title: 'CEO at TechCorp',
   },
   {
-    quote: `The best solution we've found for our analytics needs.`,
+    quote: "The best solution we've found for our analytics needs.",
     name: 'Mike Williams',
     title: 'Product Manager at StartupX',
   },
 ]
 
-// Methods
 const submitNewsletter = (): void => {
   // Handle newsletter submission
   console.log('Newsletter subscription for:', email.value)
