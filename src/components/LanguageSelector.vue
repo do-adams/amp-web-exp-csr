@@ -5,7 +5,7 @@
       id="language-select"
       :value="modelValue"
       @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
-      class="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+      class="border-gray-300 rounded-md shadow-sm form-select focus:border-blue-500 focus:ring-blue-500"
     >
       <option v-for="option in options" :key="option.value" :value="option.value">
         {{ option.label }}
